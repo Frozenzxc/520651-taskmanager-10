@@ -5,6 +5,13 @@ import {createTaskTemplate} from "./components/task";
 import {creatTaskEditTemplate} from "./components/task-editor";
 import {createLoadMoreButtonTemplate} from "./components/button-load-more";
 import {createSortTemplate} from "./components/sort";
+import {Colors} from "./const";
+import {Days} from "./const";
+import {MonthNames} from "./const";
+import {formatTime} from "./utils";
+import {generateFilters} from "./mock/filter";
+import {generateTask} from "./mock/task";
+import {generateTasks} from "./mock/task";
 
 const TASK_COUNT = 3;
 
