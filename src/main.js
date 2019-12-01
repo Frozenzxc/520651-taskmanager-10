@@ -5,14 +5,10 @@ import {createTaskTemplate} from "./components/task";
 import {createTaskEditTemplate} from "./components/task-editor";
 import {createLoadMoreButtonTemplate} from "./components/button-load-more";
 import {createSortTemplate} from "./components/sort";
-import {Colors} from "./const";
-import {Days} from "./const";
-import {MonthNames} from "./const";
-import {formatTime} from "./utils";
-import {generateFilters} from "./mock/filter";
-import {generateTasks} from "./mock/task";
+import {filters} from "./mock/filter";
+import {tasks} from "./mock/task";
 
-const TASK_COUNT = 22;
+
 const SHOWING_TASKS_COUNT_ON_START = 8;
 const SHOWING_TASKS_COUNT_BY_BUTTON = 8;
 
@@ -25,12 +21,11 @@ const siteHeaderElement = siteMainElement.querySelector(`.main__control`);
 
 render(siteHeaderElement, createMenuTemplate());
 
-const filters = generateFilters();
+
 render(siteMainElement, createFilterTemplate(filters));
 render(siteMainElement, createBoardTemplate());
 
 const taskListElement = siteMainElement.querySelector(`.board__tasks`);
-const tasks = generateTasks(TASK_COUNT);
 
 render(taskListElement, createTaskEditTemplate(tasks[0]), `beforeend`);
 let showingTasksCount = SHOWING_TASKS_COUNT_ON_START;

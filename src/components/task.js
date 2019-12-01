@@ -16,19 +16,18 @@ const createHashtagsMarkup = (hashtags) => {
 };
 
 const createTaskTemplate = (task) => {
-  const {description, tags, dueDate, color, repeatingDays} = task;
 
-  const isExpired = dueDate instanceof Date && dueDate < Date.now();
-  const isDateShowing = !!dueDate;
+  const isExpired = task.dueDate instanceof Date && task.dueDate < Date.now();
+  const isDateShowing = !!task.dueDate;
 
-  const date = isDateShowing ? `${dueDate.getDate()} ${MonthNames[dueDate.getMonth()]}` : ``;
-  const time = isDateShowing ? formatTime(dueDate) : ``;
-  const hashtags = createHashtagsMarkup(Array.from(tags));
-  const repeatClass = Object.values(repeatingDays).some(Boolean) ? `card--repeat` : ``;
+  const date = isDateShowing ? `${task.dueDate.getDate()} ${MonthNames[task.dueDate.getMonth()]}` : ``;
+  const time = isDateShowing ? formatTime(task.dueDate) : ``;
+  const hashtags = createHashtagsMarkup(Array.from(task.tags));
+  const repeatClass = Object.values(task.repeatingDays).some(Boolean) ? `card--repeat` : ``;
   const deadlineClass = isExpired ? `card--deadline` : ``;
 
   return (
-    `<article class="card card--${color} ${repeatClass} ${deadlineClass}">
+    `<article class="card card--${task.color} ${repeatClass} ${deadlineClass}">
       <div class="card__form">
         <div class="card__inner">
           <div class="card__control">
@@ -51,7 +50,7 @@ const createTaskTemplate = (task) => {
             </svg>
           </div>
           <div class="card__textarea-wrap">
-            <p class="card__text">${description}</p>
+            <p class="card__text">${task.description}</p>
           </div>
           <div class="card__settings">
             <div class="card__details">
