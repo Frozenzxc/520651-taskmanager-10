@@ -1,5 +1,5 @@
 import {MonthNames} from "../const";
-import {formatTime} from "../utils";
+import {createElement, formatTime} from "../utils";
 
 const createHashtagsMarkup = (hashtags) => {
   return hashtags
@@ -75,4 +75,25 @@ const createTaskTemplate = (task) => {
   );
 };
 
-export {createTaskTemplate};
+export default class Task {
+  constructor(tasks) {
+    this._tasks = tasks;
+    this._element = null;
+  }
+
+  getTemplate() {
+    return createTaskTemplate(this._tasks);
+  }
+
+  getElement() {
+    if (!this._element) {
+      this._element = createElement(this.getTemplate());
+    }
+
+    return this._element;
+  }
+
+  removeElement() {
+    this._element = null;
+  }
+}
