@@ -1,5 +1,6 @@
 import {MonthNames} from "../const";
-import {createElement, formatTime} from "../utils";
+import {formatTime} from "../utils/common";
+import AbstractComponent from "./abstract-component";
 
 const createHashtagsMarkup = (hashtags) => {
   return hashtags
@@ -75,25 +76,18 @@ const createTaskTemplate = (task) => {
   );
 };
 
-export default class Task {
+export default class Task extends AbstractComponent {
   constructor(tasks) {
+    super();
     this._tasks = tasks;
-    this._element = null;
   }
 
   getTemplate() {
     return createTaskTemplate(this._tasks);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+  setEditButtonClickHandler(handler) {
+    this.getElement().querySelector(`.card__btn--edit`)
+      .addEventListener(`click`, handler);
   }
 }

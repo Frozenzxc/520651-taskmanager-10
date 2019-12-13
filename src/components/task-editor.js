@@ -1,6 +1,6 @@
 import {Colors, Days, MonthNames} from '../const.js';
-import {formatTime} from '../utils.js';
-import {createElement} from "../utils";
+import {formatTime} from "../utils/common";
+import AbstractComponent from "./abstract-component";
 
 const createColorsMarkup = (colors, currentColor) => {
   return colors
@@ -58,7 +58,7 @@ const createHashtags = (tags) => {
           />
           <p class="card__hashtag-name">
             #${tag}
-          </p> 
+          </p>
           <button
             type="button"
             class="card__btn card__btn--favorites card__btn--disabled"
@@ -99,7 +99,7 @@ const createTaskEditTemplate = (task) => {
                 >${task.description}</textarea>
               </label>
             </div>
-  
+
             <div class="card__settings">
               <div class="card__details">
                 <div class="card__dates">
@@ -117,7 +117,7 @@ const createTaskEditTemplate = (task) => {
                           />
                         </label>
                       </fieldset>` : ``}
-  
+
                   <button class="card__repeat-toggle" type="button">
                     repeat:<span class="card__repeat-status">${isRepeatingTask ? `yes` : `no`}</span>
                   </button>
@@ -131,7 +131,7 @@ const createTaskEditTemplate = (task) => {
                   <div class="card__hashtag-list">
                     ${tagsMarkup}
                   </div>
-  
+
                   <label>
                     <input
                       type="text"
@@ -142,7 +142,7 @@ const createTaskEditTemplate = (task) => {
                   </label>
                 </div>
               </div>
-  
+
               <div class="card__colors-inner">
                 <h3 class="card__colors-title">Color</h3>
                 <div class="card__colors-wrap">
@@ -160,25 +160,18 @@ const createTaskEditTemplate = (task) => {
   );
 };
 
-export default class TaskEdit {
+export default class TaskEdit extends AbstractComponent {
   constructor(task) {
+    super();
     this._task = task;
-    this._element = null;
   }
 
   getTemplate() {
     return createTaskEditTemplate(this._task);
   }
 
-  getElement() {
-    if (!this._element) {
-      this._element = createElement(this.getTemplate());
-    }
-
-    return this._element;
-  }
-
-  removeElement() {
-    this._element = null;
+  setSubmitHandler(handler) {
+    this.getElement().querySelector(`form`)
+      .addEventListener(`submit`, handler);
   }
 }
