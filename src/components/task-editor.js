@@ -216,8 +216,6 @@ export default class TaskEdit extends AbstractSmartComponent {
   }
   _applyFlatpickr() {
     if (this._flatpickr) {
-      // При своем создании `flatpickr` дополнительно создает вспомогательные DOM-элементы.
-      // Что бы их удалять, нужно вызывать метод `destroy` у созданного инстанса `flatpickr`.
       this._flatpickr.destroy();
       this._flatpickr = null;
     }
