@@ -1,5 +1,5 @@
-import {formatTime, formatDate} from '../utils/common.js';
-import AbstractComponent from "./abstract-component";
+import {formatTime, formatDate, isOverdueDate} from "../utils/common";
+import AbstractComponent from "../components/abstract-component";
 
 const createHashtagsMarkup = (hashtags) => {
   return hashtags
@@ -28,20 +28,23 @@ const createButtonMarkup = (name, isActive) => {
 
 const createTaskTemplate = (task) => {
 
-  const isExpired = task.dueDate instanceof Date && task.dueDate < Date.now();
-  const isDateShowing = !!task.dueDate;
+  const {description: notSanitizedDescription, tags, dueDate, color, repeatingDays} = task;
 
-  const date = isDateShowing ? formatDate(task.dueDate) : ``;
-  const time = isDateShowing ? formatTime(task.dueDate) : ``;
-  const hashtags = createHashtagsMarkup(Array.from(task.tags));
+  const isExpired = dueDate instanceof Date && isOverdueDate(dueDate, new Date());
+  const isDateShowing = !!dueDate;
+
+  const date = isDateShowing ? formatDate(dueDate) : ``;
+  const time = isDateShowing ? formatTime(dueDate) : ``;
+  const description = window.he.encode(notSanitizedDescription);
+
+  const hashtags = createHashtagsMarkup(Array.from(tags));
   const editButton = createButtonMarkup(`edit`, true);
   const archiveButton = createButtonMarkup(`archive`, task.isArchive);
   const favoritesButton = createButtonMarkup(`favorites`, task.isFavorite);
-  const repeatClass = Object.values(task.repeatingDays).some(Boolean) ? `card--repeat` : ``;
+  const repeatClass = Object.values(repeatingDays).some(Boolean) ? `card--repeat` : ``;
   const deadlineClass = isExpired ? `card--deadline` : ``;
-
   return (
-    `<article class="card card--${task.color} ${repeatClass} ${deadlineClass}">
+    `<article class="card card--${color} ${repeatClass} ${deadlineClass}">
       <div class="card__form">
         <div class="card__inner">
           <div class="card__control">
@@ -55,7 +58,7 @@ const createTaskTemplate = (task) => {
             </svg>
           </div>
           <div class="card__textarea-wrap">
-            <p class="card__text">${task.description}</p>
+            <p class="card__text">${description}</p>
           </div>
           <div class="card__settings">
             <div class="card__details">
@@ -76,7 +79,7 @@ const createTaskTemplate = (task) => {
           </div>
         </div>
       </div>
-      </article>`
+    </article>`
   );
 };
 

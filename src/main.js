@@ -1,21 +1,31 @@
-import {filters} from "./mock/filter";
 import {tasks} from "./mock/task";
 import {RenderPosition, render} from "./utils/render";
 import SiteMenuComponent from "./components/menu";
-import FilterComponent from "./components/filter";
+import FilterController from './controllers/filter';
 import BoardComponent from "./components/board";
-import BoardController from "./controller/board";
+import BoardController from "./controllers/board";
+import TasksModel from "./models/tasks";
+
+const tasksModel = new TasksModel();
+tasksModel.setTasks(tasks);
 
 const siteMainElement = document.querySelector(`.main`);
 const siteHeaderElement = siteMainElement.querySelector(`.main__control`);
+const siteMenuComponent = new SiteMenuComponent();
 
-render(siteHeaderElement, new SiteMenuComponent(), RenderPosition.BEFOREEND);
+siteMenuComponent.getElement().querySelector(`.control__label--new-task`)
+  .addEventListener(`click`, () => {
+    boardController.createTask();
+  });
 
-render(siteMainElement, new FilterComponent(filters), RenderPosition.BEFOREEND);
+render(siteHeaderElement, siteMenuComponent, RenderPosition.BEFOREEND);
+
+const filterController = new FilterController(siteMainElement, tasksModel);
+filterController.render();
 
 const boardComponent = new BoardComponent();
 render(siteMainElement, boardComponent, RenderPosition.BEFOREEND);
 
-const boardController = new BoardController(boardComponent);
+const boardController = new BoardController(boardComponent, tasksModel);
 
-boardController.render(tasks);
+boardController.render();
