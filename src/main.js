@@ -1,4 +1,3 @@
-import {tasks} from "./mock/task";
 import {RenderPosition, render} from "./utils/render";
 import SiteMenuComponent, {MenuItem} from "./components/menu";
 import FilterController from './controllers/filter';
@@ -6,9 +5,10 @@ import BoardComponent from "./components/board";
 import BoardController from "./controllers/board";
 import TasksModel from "./models/tasks";
 import StatisticsComponent from "./components/statistics";
+import API from "./api";
 
-const tasksModel = new TasksModel();
-tasksModel.setTasks(tasks);
+const AUTHORIZATION = `Basic dXNlckBwYXNzd29yZAo=`;
+const END_POINT = `https://htmlacademy-es-10.appspot.com/task-manager`;
 
 const dateTo = new Date();
 const dateFrom = (() => {
@@ -16,23 +16,28 @@ const dateFrom = (() => {
   d.setDate(d.getDate() - 7);
   return d;
 })();
-const statisticsComponent = new StatisticsComponent({tasks: tasksModel, dateFrom, dateTo});
+
+const api = new API(END_POINT, AUTHORIZATION);
+
+const tasksModel = new TasksModel();
 
 const siteMainElement = document.querySelector(`.main`);
 const siteHeaderElement = siteMainElement.querySelector(`.main__control`);
 const siteMenuComponent = new SiteMenuComponent();
 
+const statisticsComponent = new StatisticsComponent({tasks: tasksModel, dateFrom, dateTo});
+
+const boardComponent = new BoardComponent();
+const boardController = new BoardController(boardComponent, tasksModel);
+
+const filterController = new FilterController(siteMainElement, tasksModel);
 
 render(siteHeaderElement, siteMenuComponent, RenderPosition.BEFOREEND);
 
-const filterController = new FilterController(siteMainElement, tasksModel);
 filterController.render();
 
-const boardComponent = new BoardComponent();
 render(siteMainElement, boardComponent, RenderPosition.BEFOREEND);
 render(siteMainElement, statisticsComponent, RenderPosition.BEFOREEND);
-
-const boardController = new BoardController(boardComponent, tasksModel);
 
 statisticsComponent.hide();
 boardController.render();
@@ -55,3 +60,9 @@ siteMenuComponent.setOnChange((menuItem) => {
       break;
   }
 });
+
+api.getTasks()
+  .then((tasks) => {
+    tasksModel.setTasks(tasks);
+    boardController.render();
+  });
