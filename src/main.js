@@ -7,7 +7,7 @@ import TasksModel from "./models/tasks";
 import StatisticsComponent from "./components/statistics";
 import API from "./api";
 
-const AUTHORIZATION = `Basic dXNlckBwYXNzd29yZAo=`;
+const AUTHORIZATION = `Basic eo0w590ik29889a`;
 const END_POINT = `https://htmlacademy-es-10.appspot.com/task-manager`;
 
 const dateTo = new Date();
@@ -28,7 +28,7 @@ const siteMenuComponent = new SiteMenuComponent();
 const statisticsComponent = new StatisticsComponent({tasks: tasksModel, dateFrom, dateTo});
 
 const boardComponent = new BoardComponent();
-const boardController = new BoardController(boardComponent, tasksModel);
+const boardController = new BoardController(boardComponent, tasksModel, api);
 
 const filterController = new FilterController(siteMainElement, tasksModel);
 
