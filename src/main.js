@@ -40,7 +40,6 @@ render(siteMainElement, boardComponent, RenderPosition.BEFOREEND);
 render(siteMainElement, statisticsComponent, RenderPosition.BEFOREEND);
 
 statisticsComponent.hide();
-boardController.render();
 
 siteMenuComponent.setOnChange((menuItem) => {
   switch (menuItem) {
