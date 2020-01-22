@@ -1,5 +1,6 @@
 import {formatTime, formatDate, isOverdueDate} from "../utils/common";
 import AbstractComponent from "../components/abstract-component";
+import he from "he";
 
 const createHashtagsMarkup = (hashtags) => {
   return hashtags
@@ -35,7 +36,7 @@ const createTaskTemplate = (task) => {
 
   const date = isDateShowing ? formatDate(dueDate) : ``;
   const time = isDateShowing ? formatTime(dueDate) : ``;
-  const description = window.he.encode(notSanitizedDescription);
+  const description = he.encode(notSanitizedDescription);
 
   const hashtags = createHashtagsMarkup(Array.from(tags));
   const editButton = createButtonMarkup(`edit`, true);

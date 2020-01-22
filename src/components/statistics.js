@@ -1,5 +1,9 @@
 import AbstractSmartComponent from "./abstract-smart-component";
 import {isOneDay} from "../utils/common";
+import Chart from "chart.js";
+import ChartDataLabels from "chartjs-plugin-datalabels";
+import flatpickr from "flatpickr";
+import moment from "moment";
 
 const Color = {
   BLACK: `black`,
@@ -37,7 +41,7 @@ const createRandomColor = () => {
 
 const createPlaceholder = (dateFrom, dateTo) => {
   const format = (date) => {
-    return window.moment(date).format(`DD MMM`);
+    return moment(date).format(`DD MMM`);
   };
 
   return `${format(dateFrom)} - ${format(dateTo)}`;
@@ -65,8 +69,8 @@ const renderColorsChart = (colorsCtx, tasks) => {
   const colors = tasks
     .map((task) => task.color)
     .filter(getUniqItems);
-  return new window.Chart(colorsCtx, {
-    plugins: [window.ChartDataLabels],
+  return new Chart(colorsCtx, {
+    plugins: [ChartDataLabels],
     type: `pie`,
     data: {
       labels: colors,
@@ -129,10 +133,10 @@ const renderDaysChart = (daysCtx, tasks, dateFrom, dateTo) => {
     }).length;
   });
 
-  const formattedDates = days.map((it) => window.moment(it).format(`DD MMM`));
+  const formattedDates = days.map((it) => moment(it).format(`DD MMM`));
 
-  return new window.Chart(daysCtx, {
-    plugins: [window.ChartDataLabels],
+  return new Chart(daysCtx, {
+    plugins: [ChartDataLabels],
     type: `line`,
     data: {
       labels: formattedDates,
@@ -200,8 +204,8 @@ const renderTagsChart = (tagsCtx, tasks) => {
     }, [])
     .filter(getUniqItems);
 
-  return new window.Chart(tagsCtx, {
-    plugins: [window.ChartDataLabels],
+  return new Chart(tagsCtx, {
+    plugins: [ChartDataLabels],
     type: `pie`,
     data: {
       labels: tagsLabels,
@@ -372,7 +376,7 @@ export default class Statistics extends AbstractSmartComponent {
       this._flatpickr.destroy();
     }
 
-    this._flatpickr = window.flatpickr(element, {
+    this._flatpickr = flatpickr(element, {
       altInput: true,
       allowInput: true,
       defaultDate: [this._dateFrom, this._dateTo],
